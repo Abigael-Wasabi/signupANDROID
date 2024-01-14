@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "57510627341",
+    "project_id": "simple-login-screen-7cad8",
+    "storage_bucket": "simple-login-screen-7cad8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57510627341:android:3bce36fbd2611050e02d44",
+        "android_client_info": {
+          "package_name": "com.ist.simpleloginscreen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbDw7_aMmg_UDAIdPErUXnfnyQhv0zzsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
