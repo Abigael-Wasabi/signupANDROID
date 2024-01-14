@@ -1,5 +1,3 @@
-# Simple Login Screen.
+# Simple signup Screen.
 
-- _Description:_ A simple login screen with email, password, and other fields.
-
-<img src="../public/simple-login.png" alt="simple login image"/>
+ A simple signup screen with username, email, password, phone number
