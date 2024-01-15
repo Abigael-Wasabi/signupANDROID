@@ -1,5 +1,7 @@
 package com.ist.simpleloginscreen.repo
 
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.ist.simpleloginscreen.di.remote.FirebaseService
@@ -10,10 +12,10 @@ class UserRepository(private val firebaseService: FirebaseService) {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    suspend fun registerUser(email: User, password: String): User? {
+    suspend fun registerUser(email: User): User? {
         try {
             // new user,email n passw
-            val result = auth.createUserWithEmailAndPassword(email.toString(), password).await()
+            val result = auth.createUserWithEmailAndPassword(email.toString()).await()
 
             // Convert FirebaseUser to your User model
             val user = result.user?.let { mapFirebaseUserToUser(it) }
@@ -50,6 +52,10 @@ class UserRepository(private val firebaseService: FirebaseService) {
             roles = null,
         )
     }
+}
+
+private fun FirebaseAuth.createUserWithEmailAndPassword(toString: String): Task<AuthResult> {
+    TODO("Not yet implemented")
 }
 
 

@@ -42,16 +42,18 @@ fun SignupScreen(navController: NavHostController) {
             .background(Color.White)
             .padding(50.dp)
     ) {
-        Column(modifier = Modifier.fillMaxSize(),
+        Column(
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally){
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             MyProfile()
             HeadingTextComponent(value = "Create an account")
-            SimpleTextComponent(value = "Connect with your friends today")
-            UserFieldComponent(labelValue ="Username", icon = Icons.Default.Person)
-            UserFieldComponent(labelValue ="Email Address", icon = Icons.Default.Email)
-            UserFieldComponent(labelValue ="Phone Number", icon = Icons.Default.Phone)
-            PasswordTextFieldComponent(labelValue = "Password", icon = Icons.Default.Lock )
+            SimpleTextComponent(value = "Request for a ride")
+            UserFieldComponent(labelValue = "Username", icon = Icons.Default.Person)
+            UserFieldComponent(labelValue = "Email Address", icon = Icons.Default.Email)
+            UserFieldComponent(labelValue = "Phone Number", icon = Icons.Default.Phone)
+            PasswordTextFieldComponent(labelValue = "Password", icon = Icons.Default.Lock)
             RememberMe()
             ButtonComponent(value = "Sign up")
             OrWith()
@@ -60,8 +62,6 @@ fun SignupScreen(navController: NavHostController) {
         }
     }
 }
-
-
 
 
 @Composable
