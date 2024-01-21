@@ -23,18 +23,21 @@
  * None.
  */
 package com.ist.simpleloginscreen
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.ist.simpleloginscreen.app.Ondemand
-import com.ist.simpleloginscreen.ui.theme.SimpleLoginScreenTheme
+import com.ist.simpleloginscreen.app.SimpleLoginApp
+import com.ist.simpleloginscreen.presentation.ui.theme.SimpleLoginScreenTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             SimpleLoginScreenTheme {
-                Ondemand()
+                SimpleLoginApp()
             }
         }
     }

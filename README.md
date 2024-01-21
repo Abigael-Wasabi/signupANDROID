@@ -1,6 +1,5 @@
 # Simple signup Screen.
-
- A simple signup screen with username, email, password, phone number
- 
-![image](https://github.com/Abigael-Wasabi/signupANDROID/assets/94919325/cc0cd0e1-ead3-4f35-bf3d-926b7055f057)
-
+A simple signup screen with username, email, password, phone number
+Android app,applied MVVM architecture, screens reps the UI, viewModels reps controllers(business
+logic), model rep structure of the db, userRepo injects firebase
+services, navigation for navigating thru the app;frm one screen to another

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Simple Login Screen</string>
+    <string name="enter_order">Enter order</string>
 </resources>
