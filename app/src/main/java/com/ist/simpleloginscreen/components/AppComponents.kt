@@ -1,6 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
-package com.ist.loginscreen.components
+package com.ist.simpleloginscreen.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,13 +12,13 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TextField
@@ -29,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
@@ -39,31 +36,31 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-//import com.ist.loginscreen.R
-//import com.ist.loginscreen.ui.theme.BgColor
-//import com.ist.loginscreen.ui.theme.Primary
-//import com.ist.loginscreen.ui.theme.*
+import androidx.navigation.NavHostController
 import com.ist.simpleloginscreen.R
-import com.ist.simpleloginscreen.ui.theme.BgColor
-import com.ist.simpleloginscreen.ui.theme.Primary
+import com.ist.simpleloginscreen.presentation.ui.theme.LightColorScheme
 
 
 @Composable
-fun SimpleTextComponent(value:String){
-    Text(text = value,
+fun SimpleTextComponent(value: String) {
+    Text(
+        text = value,
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 80.dp),
+            .heightIn(min = 50.dp),
         style = TextStyle(
-            fontSize =14.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Normal,
         ),
-        textAlign = TextAlign.Center)
+        textAlign = TextAlign.Center
+    )
 
 }
+
 @Composable
 fun HeadingTextComponent(value: String) {
     Text(
@@ -79,11 +76,14 @@ fun HeadingTextComponent(value: String) {
         textAlign = TextAlign.Center
     )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserFieldComponent(
     labelValue: String,
     icon: ImageVector,
+    value: String,
+    onValueChange: (TextFieldValue) -> Unit
 ) {
 
     val textValue = remember {
@@ -97,10 +97,10 @@ fun UserFieldComponent(
 
         label = { Text(text = labelValue) },
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary,
-            containerColor = BgColor
+            focusedBorderColor = LightColorScheme.primary,
+            focusedLabelColor = LightColorScheme.primary,
+            cursorColor = LightColorScheme.primary,
+            containerColor = LightColorScheme.background
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         singleLine = true,
@@ -114,10 +114,14 @@ fun UserFieldComponent(
         },
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordTextFieldComponent(
     labelValue: String,
     icon: ImageVector,
+    value: String,
+    onValueChange: (TextFieldValue) -> Unit
 ) {
 
     val localFocusManager = LocalFocusManager.current
@@ -135,10 +139,10 @@ fun PasswordTextFieldComponent(
 
         label = { Text(text = labelValue) },
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Primary,
-            focusedLabelColor = Primary,
-            cursorColor = Primary,
-            containerColor = BgColor
+            focusedBorderColor = LightColorScheme.primary,
+            focusedLabelColor = LightColorScheme.primary,
+            cursorColor = LightColorScheme.primary,
+            containerColor = LightColorScheme.background
         ),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
@@ -160,9 +164,12 @@ fun PasswordTextFieldComponent(
 
         )
 }
+
+
 @Composable
-fun ButtonComponent(value:String){
-    Button(onClick = {  },
+fun ButtonComponent(value: String) {
+    Button(
+        onClick = { },
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
@@ -173,53 +180,109 @@ fun ButtonComponent(value:String){
 }
 
 
+@Composable
+fun DropDown(value: String) {
+    Button(
+        onClick = { },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp)
+
+    ) {
+        Text(text = value)
+    }
+}
+
 
 @Composable
-fun MyProfile(){
+fun MyProfile() {
 
-    Column (modifier = Modifier
-        .padding(16.dp)
-        .background(Color.Blue)
-    ){
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
 
         Image(
-            painter = painterResource(id = R.drawable.chess),
+            painter = painterResource(id = R.drawable.art),
             contentDescription = "alt",
-            modifier= Modifier
+            modifier = Modifier
                 .size(128.dp)
-                .clip(CircleShape)
+//                .clip(CircleShape)
+        )
+    }
+}
+
+@Composable
+fun MyImage() {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.art),
+            contentDescription = "alt",
+            modifier = Modifier
+                .size(128.dp)
+//                .clip(CircleShape)
         )
     }
 }
 
 
+@Composable
+fun MyLogo() {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.naivas),
+            contentDescription = "alt",
+            modifier = Modifier
+                .size(128.dp)
+        )
+    }
+}
 
 
 @Composable
-fun SignUp(){
-    Row(modifier = Modifier.padding(16.dp)){
+fun SignUp(navController: NavHostController) {
+    Row(modifier = Modifier.padding(16.dp)) {
         Text(
             text = "Dont have an account? Sign Up",
-            modifier = Modifier.padding(end = 5.dp),
-        )
+//            modifier = Modifier.padding(end = 5.dp),
+            modifier = Modifier.clickable { navController.navigate("SignUp") },
+
+            )
     }
 }
 
 @Composable
-fun LoginText(){
-    Row(modifier = Modifier.padding(16.dp)){
+fun LoginText(navController: NavHostController) {
+    Row(modifier = Modifier.padding(16.dp)) {
         Text(
             text = "Already have an account? Login",
-            modifier = Modifier.padding(end = 5.dp),
+//            modifier = Modifier.padding(end = 5.dp),
+            modifier = Modifier.clickable { navController.navigate("Login") }
         )
     }
 }
 
 @Composable
-fun OrWith(){
-    Row(modifier = Modifier.padding(16.dp)){
+fun OrWith() {
+    Row(modifier = Modifier.padding(16.dp)) {
         Text(
             text = "or With",
+            modifier = Modifier.padding(end = 55.dp),
+        )
+    }
+}
+
+@Composable
+fun Or() {
+    Row(modifier = Modifier.padding(16.dp)) {
+        Text(
+            text = "or",
             modifier = Modifier.padding(end = 55.dp),
         )
     }
@@ -230,7 +293,7 @@ fun OrWith(){
 fun GitS() {
     Row(modifier = Modifier.padding(16.dp)) {
         Button(
-            onClick = {  },
+            onClick = { },
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
@@ -253,7 +316,7 @@ fun GitS() {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.gitl),
-                contentDescription = "GitHub Icon",
+                contentDescription = "Gitlab Icon",
                 modifier = Modifier.size(24.dp)
             )
             Text(text = "GitLab")
@@ -262,18 +325,51 @@ fun GitS() {
 }
 
 @Composable
+fun GooGle() {
+    Row {
+        Button(
+            onClick = { },
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.google),
+                contentDescription = "Google button",
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
+
+@Composable
 fun AdOptions(value: String) {
-    Column (modifier = Modifier
+    Column(modifier = Modifier
         .fillMaxWidth()
         .height(50.dp)
         .padding(8.dp)
         .background(Color.Gray)
         .clickable { }
-    ){
-
+    ) {
         Text(text = value)
 
     }
 
 }
 
+@Composable
+fun RememberMe() {
+    Row(modifier = Modifier.padding(16.dp)) {
+        Checkbox(checked = false, onCheckedChange = {})
+        Spacer(modifier = Modifier.weight(1f))//space btwn checkbox n fp
+        Text(
+            text = "Remember Me",
+            modifier = Modifier.padding(end = 55.dp),
+        )
+
+        Text(
+            text = "Forgot Password",
+            modifier = Modifier.padding(end = 16.dp),
+        )
+    }
+}
