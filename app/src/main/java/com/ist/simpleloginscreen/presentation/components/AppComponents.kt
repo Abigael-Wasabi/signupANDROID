@@ -1,4 +1,4 @@
-package com.ist.simpleloginscreen.components
+package com.ist.simpleloginscreen.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +21,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -29,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -38,9 +41,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.android.gms.common.SignInButton
 import com.ist.simpleloginscreen.R
 import com.ist.simpleloginscreen.presentation.ui.theme.LightColorScheme
 
@@ -113,56 +118,6 @@ fun UserFieldComponent(
             textValue.value = it
         },
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PasswordTextFieldComponent(
-    labelValue: String,
-    icon: ImageVector,
-    value: String,
-    onValueChange: (TextFieldValue) -> Unit
-) {
-
-    val localFocusManager = LocalFocusManager.current
-    val password = remember {
-        mutableStateOf("")
-    }
-
-    val passwordVisible = remember {
-        mutableStateOf(false)
-    }
-
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth(),
-
-        label = { Text(text = labelValue) },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = LightColorScheme.primary,
-            focusedLabelColor = LightColorScheme.primary,
-            cursorColor = LightColorScheme.primary,
-            containerColor = LightColorScheme.background
-        ),
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done
-        ),
-        singleLine = true,
-        keyboardActions = KeyboardActions {
-            localFocusManager.clearFocus()
-        },
-        maxLines = 1,
-        value = password.value,
-        onValueChange = {
-            password.value = it
-        },
-        leadingIcon = {
-            Icon(icon, contentDescription = "")
-        },
-
-
-        )
 }
 
 
@@ -325,19 +280,19 @@ fun GitS() {
 }
 
 @Composable
-fun GooGle() {
-    Row {
-        Button(
-            onClick = { },
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.google),
-                contentDescription = "Google button",
-                modifier = Modifier.size(24.dp)
-            )
+fun GoogleSignInButton(onGoogleSignIn: () -> Unit) {
+    val context = LocalContext.current
+    val signInButtonStyle = LocalTextStyle.current.copy(
+        textDecoration = TextDecoration.LineThrough // You can adjust the style here
+    )
+
+
+    SignInButton(context).apply {
+        setSize(SignInButton.SIZE_WIDE)
+        setColorScheme(SignInButton.COLOR_LIGHT)
+        setOnClickListener {
+            // Calling the provided callback when the Google Signinn button is clicked
+            onGoogleSignIn()
         }
     }
 }
@@ -372,4 +327,55 @@ fun RememberMe() {
             modifier = Modifier.padding(end = 16.dp),
         )
     }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PasswordTextFieldComponent(
+    labelValue: String,
+    icon: ImageVector,
+    value: String,
+    onValueChange: (TextFieldValue) -> Unit
+) {
+
+    val localFocusManager = LocalFocusManager.current
+    val password = remember {
+        mutableStateOf("")
+    }
+
+    val passwordVisible = remember {
+        mutableStateOf(false)
+    }
+
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+
+        label = { Text(text = labelValue) },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = LightColorScheme.primary,
+            focusedLabelColor = LightColorScheme.primary,
+            cursorColor = LightColorScheme.primary,
+            containerColor = LightColorScheme.background
+        ),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done
+        ),
+        singleLine = true,
+        keyboardActions = KeyboardActions {
+            localFocusManager.clearFocus()
+        },
+        maxLines = 1,
+        value = password.value,
+        onValueChange = {
+            password.value = it
+        },
+        leadingIcon = {
+            Icon(icon, contentDescription = "")
+        },
+
+
+        )
 }

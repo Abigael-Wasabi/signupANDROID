@@ -23,9 +23,8 @@ import com.ist.simpleloginscreen.presentation.common.navigateTo
 enum class BottomNavigationItem(val icon: Int, val navDestination: Routes) {
     SERVICES(R.drawable.ic_home, Routes.Services),
     SEARCH(R.drawable.ic_search, Routes.Search),
-
-    //MYSERVICES(R.drawable.ic_posts,Routes.MyServices),
-    PROFILE(R.drawable.ic_posts, Routes.Profile),
+    MYSERVICES(R.drawable.ic_cart, Routes.Cart),
+    PROFILE(R.drawable.ic_user, Routes.Profile),
 }
 
 

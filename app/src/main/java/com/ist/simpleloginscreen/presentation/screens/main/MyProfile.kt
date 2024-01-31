@@ -1,4 +1,4 @@
-package com.ist.simpleloginscreen.presentation.screens.main
+package com.ist.loginscreen.presentation.screens.main
 
 import android.net.Uri
 import android.util.Log
@@ -193,3 +193,5 @@ fun ProfileImage(imageUrl: String?, vm: MainViewModel) {
             ProgressSpinner()
     }
 }
+
+

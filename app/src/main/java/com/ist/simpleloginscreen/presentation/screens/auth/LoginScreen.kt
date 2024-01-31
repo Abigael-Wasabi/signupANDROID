@@ -1,9 +1,9 @@
 package com.ist.loginscreen.screens.login
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-//import androidx.compose.foundation.layout.ColumnScopeInstance.weight
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,6 +12,9 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,35 +23,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-//import com.ist.loginscreen.components.ButtonComponent
-//import com.ist.loginscreen.components.GooGle
-//import com.ist.loginscreen.components.HeadingTextComponent
-//import com.ist.loginscreen.components.MyLogo
-//import com.ist.loginscreen.components.Or
-//import com.ist.loginscreen.components.PasswordTextFieldComponent
-//import com.ist.loginscreen.components.SignUp
-//import com.ist.loginscreen.components.SimpleTextComponent
-//import com.ist.loginscreen.components.UserFieldComponent
-import com.ist.simpleloginscreen.components.ButtonComponent
-import com.ist.simpleloginscreen.components.GooGle
-import com.ist.simpleloginscreen.components.HeadingTextComponent
-import com.ist.simpleloginscreen.components.MyLogo
-import com.ist.simpleloginscreen.components.Or
-import com.ist.simpleloginscreen.components.PasswordTextFieldComponent
-import com.ist.simpleloginscreen.components.SignUp
-import com.ist.simpleloginscreen.components.SimpleTextComponent
-import com.ist.simpleloginscreen.components.UserFieldComponent
+import com.ist.simpleloginscreen.data.Event
 import com.ist.simpleloginscreen.presentation.MainViewModel
+import com.ist.simpleloginscreen.presentation.common.CheckSignedIn
+import com.ist.simpleloginscreen.presentation.common.ProgressSpinner
+import com.ist.simpleloginscreen.presentation.components.HeadingTextComponent
+import com.ist.simpleloginscreen.presentation.components.MyLogo
+import com.ist.simpleloginscreen.presentation.components.Or
+import com.ist.simpleloginscreen.presentation.components.SignUp
+import com.ist.simpleloginscreen.presentation.components.SimpleTextComponent
+import com.ist.simpleloginscreen.presentation.components.GoogleSignInButton
 import com.ist.loginscreen.screens.login.Preview as Preview1
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
 @Preview1
 fun LoginScreen(navController: NavHostController, vm: MainViewModel) {
+    CheckSignedIn(vm = vm, navController = navController)
+    val focus = LocalFocusManager.current
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -62,39 +60,69 @@ fun LoginScreen(navController: NavHostController, vm: MainViewModel) {
         ) {
             val emailState = remember { mutableStateOf(TextFieldValue()) }
             val passState = remember { mutableStateOf(TextFieldValue()) }
+            val popupNotification = remember { mutableStateOf<Event<String>?>(null) }
             MyLogo()
             HeadingTextComponent(value = "Hi, Welcome back")
             SimpleTextComponent(value = "Order from us")
-            UserFieldComponent(
-                labelValue = "Email Address",
-                icon = Icons.Default.Email,
-                value = emailState.value.text,
+            OutlinedTextField(value = emailState.value,
                 onValueChange = { emailState.value = it },
-            )
+                modifier = Modifier.padding(8.dp),
+                label = { Text(text = "Email") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Email,
+                        contentDescription = null,
+                        tint = Color.Gray
+                    )
+                })
 
-            PasswordTextFieldComponent(
-                labelValue = "Password",
-                icon = Icons.Default.Lock,
-                value = passState.value.text,
+            OutlinedTextField(
+                value = passState.value,
                 onValueChange = { passState.value = it },
-//                visualTransformation = PasswordVisualTransformation()
-            )
-            RememberMeRow()
-//            ButtonComponent(value = "Login")
-            Button(
-                onClick = {
-                    vm.onLogin(
-                        emailState.value.text,
-                        passState.value.text
+                modifier = Modifier.padding(8.dp),
+                label = { Text(text = "Password") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Lock,
+                        contentDescription = null,
+                        tint = Color.Gray
                     )
                 },
-                modifier = Modifier.padding(8.dp)
+                visualTransformation = PasswordVisualTransformation()
+            )
+            RememberMeRow()
+            Button(
+                onClick = {
+                    val email = emailState.value.text
+                    val pass = passState.value.text
+                    if (email.isNotEmpty() && pass.isNotEmpty()) {
+                        vm.onLogin(email, pass)
+                        navController.navigate("Services")
+                    } else {
+                        Log.d(null, "Please fill in all the fields")
+                        popupNotification.value = Event("Please fill in all the fields")
+                    }
+                },
+                modifier = Modifier
+                    .padding(8.dp)
             ) {
                 Text(text = "LOGIN")
             }
             Or()
-            GooGle()
             SignUp(navController)
+
+            popupNotification.value?.getContentIfNotHandled()?.let { message ->
+                Text(
+                    text = message,
+                    color = Color.Red,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+
+            val isLoading = vm.inProgress.value
+            if (isLoading) {
+                ProgressSpinner()
+            }
 
         }
     }
@@ -119,8 +147,6 @@ fun RememberMeRow() {
         )
     }
 }
-
-
 
 
 
