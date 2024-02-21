@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ import com.ist.simpleloginscreen.presentation.screens.main.BottomNavigationMenu
 @Composable
 fun ServiceScreen(navController: NavController, vm: MainViewModel) {
     var selectedOption by remember { mutableStateOf("Hair Products") }
+
     Column(modifier = Modifier.fillMaxSize()) {
         Text(text = "Service Screen")
 
@@ -46,7 +48,7 @@ fun ServiceScreen(navController: NavController, vm: MainViewModel) {
         )
 
 
-//Horizontal Bar with Options
+        //Horizontal Bar with Options
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -61,10 +63,10 @@ fun ServiceScreen(navController: NavController, vm: MainViewModel) {
 
         //Display Product Grid based on selected option
         when (selectedOption) {
-            "Hair Products" -> ProductGrid(hairProducts)
-            "Foods" -> ProductGrid(foodProducts)
-            "Stationeries" -> ProductGrid(stationeryProducts)
-            "Electronics" -> ProductGrid(electronicsProducts)
+            "Hair Products" -> ProductGrid(hairProducts) { product -> vm.addToCart(product) }
+            "Foods" -> ProductGrid(foodProducts) { product -> vm.addToCart(product) }
+            "Stationeries" -> ProductGrid(stationeryProducts) { product -> vm.addToCart(product) }
+            "Electronics" -> ProductGrid(electronicsProducts) { product -> vm.addToCart(product) }
         }
     }
 }
@@ -80,23 +82,27 @@ fun OptionItem(text: String, onClick: () -> Unit) {
 }
 
 @Composable
-fun ProductGrid(products: List<Product>) {
+fun ProductGrid(products: List<Product>, onItemClick: (Product) -> Unit) {
     LazyColumn(
         modifier = Modifier.padding(16.dp)
     ) {
         items(products) { product ->
-            ProductCard(product)
+            ProductCard(product, onItemClick)
         }
     }
 }
 
 @Composable
-fun ProductCard(product: Product) {
+fun ProductCard(product: Product, onItemClick: (Product) -> Unit) {
     Card(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable { onItemClick(product) }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Image(
+//                imageUrl = cartItem.itemImage
+//                painter = painterResource(id = product.imageResId),
                 painter = painterResource(id = product.imageResId),
                 contentDescription = null,
                 modifier = Modifier.size(120.dp)
@@ -104,6 +110,11 @@ fun ProductCard(product: Product) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = product.name)
             Text(text = "$${product.price}")
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = { onItemClick(product) }) {
+                Text(text = "Add to Cart")
+            }
         }
     }
 }
+
