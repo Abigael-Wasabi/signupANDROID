@@ -34,6 +34,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    val products: MutableState<List<Product>> = mutableStateOf(emptyList()),
     val auth: FirebaseAuth, val db: FirebaseFirestore, val storage: FirebaseStorage,
 ) : ViewModel() {
 
@@ -122,16 +123,21 @@ class MainViewModel @Inject constructor(
 
 
     fun onLogin(email: String, pass: String) {
-
         inProgress.value = true
         //Method to sign in a user with an email address and password.
         auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                signedIn.value = true
-                getUserData(auth.currentUser?.uid ?: "")
-                //Add grt services function here
-                //test whether the user is signed in
-                //handleException(customMessage = "Login successful")
+                val currentUser = auth.currentUser
+                if (currentUser != null) {
+                    signedIn.value = true
+                    getUserData(currentUser.uid)
+                    //Add grt services function here
+                    //test whether the user is signed in
+                    handleException(customMessage = "Welcome $email")
+                } else {
+                    handleException(customMessage = "User does not exist")
+                    inProgress.value = false
+                }
             } else {
                 handleException(task.exception, "Login failed")
                 inProgress.value = false
@@ -141,6 +147,7 @@ class MainViewModel @Inject constructor(
             inProgress.value = false
         }
     }
+
 
     /**
      * Creates or updates the user profile with the provided information.
@@ -364,14 +371,22 @@ class MainViewModel @Inject constructor(
 
     // add an item to the cart
     fun addToCart(item: Product) {
-        val cartItem = CartItem(
-            itemId = item.id, // Assuming your Product class has an id property
-            itemName = item.name,
-            itemPrice = item.price,
-            itemImage = item.imageResId.toString(),
-            quantity = 1, //initial quantity is 1
-        )
-        cartItems.value = cartItems.value + listOf(cartItem)
+        val existingItem = cartItems.value.find { it.itemName == item.name }
+        if (existingItem != null) {
+            // If item already exists in the cart, increment quantity
+            existingItem.quantity++
+            cartItems.value = cartItems.value // Trigger recomposition
+        } else {
+            // If item does not exist in the cart, add it with quantity 1
+            val cartItem = CartItem(
+                itemId = item.id, // Assuming your Product class has an id property
+                itemName = item.name,
+                itemPrice = item.price,
+                itemImage = item.imageResId.toString(),
+                quantity = 1, //initial quantity is 1
+            )
+            cartItems.value = cartItems.value + listOf(cartItem)
+        }
     }
 
 
