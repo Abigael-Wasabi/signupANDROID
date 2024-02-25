@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -24,7 +22,9 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -383,28 +383,4 @@ fun PasswordTextFieldComponent(
 
         )
 }
-
-//@Composable
-//fun LocationDropdown(label: String, options: List<String>) {
-//    var expanded by remember { mutableStateOf(false) }
-//    var selectedOption by remember { mutableStateOf(options.firstOrNull()) }
-//
-//    Column {
-//        Text(text = label)
-//        DropdownMenu(
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false },
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            options.forEach { option ->
-//                DropdownMenuItem(onClick = {
-//                    selectedOption = option
-//                    expanded = false
-//                }) {
-//                    Text(text = option)
-//                }
-//            }
-//        }
-//    }
-//}
 

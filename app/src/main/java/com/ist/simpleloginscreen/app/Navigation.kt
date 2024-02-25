@@ -12,7 +12,6 @@ import com.ist.ondemand.presentation.screens.main.ServiceScreen
 import com.ist.simpleloginscreen.presentation.MainViewModel
 import com.ist.simpleloginscreen.presentation.common.NotificationMessage
 import com.ist.simpleloginscreen.presentation.screens.auth.ProfileScreen
-import com.ist.simpleloginscreen.presentation.screens.main.SearchScreen
 import com.ist.simpleloginscreen.presentation.screens.proj.CartScreen
 
 
@@ -34,9 +33,9 @@ fun SimpleLoginApp() {
         composable(Routes.Services.route) {
             ServiceScreen(navController = navController, vm = vm)
         }
-        composable(Routes.Search.route) {
-            SearchScreen(navController = navController, vm = vm)
-        }
+//        composable(Routes.Search.route) {
+//            SearchScreen(navController = navController, vm = vm)
+//        }
         composable(Routes.MyServices.route) {
             MyServicesScreen(navController = navController, vm = vm)
         }
@@ -46,14 +45,5 @@ fun SimpleLoginApp() {
         composable(Routes.Cart.route) {
             CartScreen(navController = navController, vm = vm, selectedItems = selectedItems)
         }
-//        navController.navigate(route = "cart") {
-//            launchSingleTop = true
-//            restoreState = true
-//            popUpTo("products") {
-//                inclusive = true
-//            }
-//            // Passing selected items to CartScreen
-//            CartScreen(navController = navController, vm = vm, selectedItems = selectedItems)
-//        }
     }
 }

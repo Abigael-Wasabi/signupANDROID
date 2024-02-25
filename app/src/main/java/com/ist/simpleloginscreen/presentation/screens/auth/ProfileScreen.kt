@@ -25,6 +25,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,6 +38,8 @@ import com.ist.simpleloginscreen.presentation.MainViewModel
 import com.ist.simpleloginscreen.presentation.common.CommonImage
 import com.ist.simpleloginscreen.presentation.common.ProgressSpinner
 import com.ist.simpleloginscreen.presentation.common.navigateTo
+import com.ist.simpleloginscreen.presentation.screens.main.BottomNavigationItem
+import com.ist.simpleloginscreen.presentation.screens.main.BottomNavigationMenu
 
 
 /**
@@ -47,33 +50,46 @@ import com.ist.simpleloginscreen.presentation.common.navigateTo
  */
 @Composable
 fun ProfileScreen(navController: NavController, vm: MainViewModel) {
-    // Check if data is being loaded
-    val isLoading = vm.inProgress.value
-    if (isLoading) {
-        ProgressSpinner()
-    } else {
-        // Retrieve user data
-        val userData = vm.userData.value
+    var isSearchVisible by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf("") }
 
-        // Initialize mutable state variables for name, username, and bio
-        var name by rememberSaveable { mutableStateOf(userData?.name ?: "") }
-        var username by rememberSaveable { mutableStateOf(userData?.username ?: "") }
-        var bio by rememberSaveable { mutableStateOf(userData?.bio ?: "") }
+    Column {
+        BottomNavigationMenu(
+            selectedItem = BottomNavigationItem.PROFILE,
+            navController = navController,
+            isSearchVisible = isSearchVisible,
+            onSearchTextChanged = { text -> searchText = text },
+            onSearchIconClicked = { isSearchVisible = !isSearchVisible }
+        )
 
-        // Render the profile content
-        ProfileContent(vm = vm,
-            name = name,
-            username = username,
-            bio = bio,
-            onNameChange = { name = it },
-            onUsernameChange = { username = it },
-            onBioChange = { bio = it },
-            onSave = { vm.updateProfileData(name, username, bio) },
-            onBack = { navigateTo(navController = navController, Routes.Services) },
-            onLogout = {
-                vm.onLogout()
-                navigateTo(navController, Routes.Login)
-            })
+        // Check if data is being loaded
+        val isLoading = vm.inProgress.value
+        if (isLoading) {
+            ProgressSpinner()
+        } else {
+            // Retrieve user data
+            val userData = vm.userData.value
+
+            // Initialize mutable state variables for name, username, and bio
+            var name by rememberSaveable { mutableStateOf(userData?.name ?: "") }
+            var username by rememberSaveable { mutableStateOf(userData?.username ?: "") }
+            var bio by rememberSaveable { mutableStateOf(userData?.bio ?: "") }
+
+            // Render the profile content
+            ProfileContent(vm = vm,
+                name = name,
+                username = username,
+                bio = bio,
+                onNameChange = { name = it },
+                onUsernameChange = { username = it },
+                onBioChange = { bio = it },
+                onSave = { vm.updateProfileData(name, username, bio) },
+                onBack = { navigateTo(navController = navController, Routes.Services) },
+                onLogout = {
+                    vm.onLogout()
+                    navigateTo(navController, Routes.Login)
+                })
+        }
     }
 }
 
