@@ -3,6 +3,7 @@ package com.ist.simpleloginscreen.presentation.screens.proj
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -35,10 +37,20 @@ import com.ist.simpleloginscreen.presentation.screens.main.BottomNavigationMenu
 
 fun verticalScroll(rememberScrollState: ScrollState, function: () -> Unit) = Unit
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartScreen(navController: NavController, vm: MainViewModel, selectedItems: List<Item>) {
     var isSearchVisible by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
+    var deliveryTime by remember { mutableStateOf("") }
+    var deliveryDate by remember { mutableStateOf("") }
+    var isPhoneNumberValid by remember { mutableStateOf(false) }
+    var isDateValid by remember { mutableStateOf(false) }
+    var isTimeValid by remember { mutableStateOf(false) }
+    var selectedLocation by remember { mutableStateOf("") }
+    var isLocationValid by remember { mutableStateOf(false) }
+    isLocationValid = selectedLocation in nairobiLocations
 
     Column {
         BottomNavigationMenu(
@@ -51,17 +63,66 @@ fun CartScreen(navController: NavController, vm: MainViewModel, selectedItems: L
 
         // Calculate total amount
         val totalAmount = selectedItems.sumOf { it.price }
-
-        // State variable to track if phone number is filled
-        var phoneNumberFilled by remember { mutableStateOf(false) }
-
+        
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Back",
                 modifier = Modifier.clickable { navController.popBackStack() }
             )
             Spacer(modifier = Modifier.height(16.dp))
-            InputField(label = "Phone Number") { filled -> phoneNumberFilled = filled }
+            InputField(
+                label = "Phone Number",
+                value = phoneNumber,
+                onValueChange = { value ->
+                    phoneNumber = value
+                    isPhoneNumberValid = validatePhoneNumber(value)
+                },
+                onFilled = { /* No action needed for phone number */ },
+            )
+            if (!isPhoneNumberValid) {
+                Text(text = "Enter a valid phone number", color = Color.Red)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            InputField(
+                label = "Location",
+                value = selectedLocation,
+                onValueChange = { value ->
+                    selectedLocation = value
+                },
+                onFilled = { /* No action needed for location */ },
+            )
+
+            if (!isLocationValid) {
+                Text(text = "location within Nairobi", color = Color.Red)
+            }
+
+            InputField(
+                label = "Delivery Date (dd/MM/yyyy or dd.MM.yyyy)",
+                value = deliveryDate,
+                onValueChange = { value ->
+                    deliveryDate = value
+                    isDateValid = validateDate(value)
+                },
+                onFilled = { /* No action needed for delivery date */ },
+            )
+            if (!isDateValid) {
+                Text(text = "Enter a valid date format", color = Color.Red)
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            InputField(
+                label = "Delivery Time (HH:mm)",
+                value = deliveryTime,
+                onValueChange = { value ->
+                    deliveryTime = value
+                    isTimeValid = validateTime(value)
+                },
+                onFilled = { /* No action needed for delivery time */ },
+            )
+            if (!isTimeValid) {
+                Text(text = "Enter a valid time format within working hours", color = Color.Red)
+            }
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(text = "Selected Items:")
@@ -110,22 +171,32 @@ fun CartScreen(navController: NavController, vm: MainViewModel, selectedItems: L
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "Total Amount: \$${"%.2f".format(totalAmount)}")
             Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = { /* Pay button action */ },
-                enabled = phoneNumberFilled
+
+            // Center the buttons vertically
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Text(text = "Pay")
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                onClick = { /* Order button action */ },
-                enabled = phoneNumberFilled
-            ) {
-                Text(text = "Order")
+                Button(
+                    onClick = { /* Pay button action */ },
+                    enabled = isPhoneNumberValid && selectedItems.isNotEmpty()
+                ) {
+                    Text(text = "Pay")
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = { /* Order button action */ },
+                    enabled = isPhoneNumberValid && isDateValid && isTimeValid &&
+                            isLocationValid && selectedItems.isNotEmpty()
+                ) {
+                    Text(text = "Order")
+                }
             }
         }
     }
 }
+
 
 // Model class for representing an item
 data class Item(val name: String, val price: Double, val imageUrl: Int)
@@ -133,16 +204,27 @@ data class Item(val name: String, val price: Double, val imageUrl: Int)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InputField(label: String, onFilled: (Boolean) -> Unit) {
+fun InputField(
+    label: String,
+    value: String, // Added parameter
+    onValueChange: (String) -> Unit, // Explicitly specified type
+    onFilled: (Boolean) -> Unit,
+    isNumeric: Boolean = false,
+) {
     var text by remember { mutableStateOf(TextFieldValue()) }
     Column {
         Text(text = label)
         TextField(
             value = text,
             onValueChange = {
-                val isValidPhoneNumber = validatePhoneNumber(it.text)
+                val isValidInput = if (isNumeric) {
+                    it.text.all { char -> char.isDigit() }
+                } else {
+                    true // No validation needed for non-numeric inputs
+                }
                 text = it
-                onFilled(isValidPhoneNumber && it.text.isNotEmpty())
+                onValueChange(it.text) // Pass the text value to the onValueChange callback
+                onFilled(isValidInput && it.text.isNotEmpty())
             },
             modifier = Modifier.fillMaxWidth()
         )
@@ -153,11 +235,43 @@ fun InputField(label: String, onFilled: (Boolean) -> Unit) {
 fun validatePhoneNumber(phoneNumber: String): Boolean {
     //at least 10 chars
     if (phoneNumber.length < 10) return false
-
     //contain only nos and the + sign
     return phoneNumber.all { it.isDigit() || it == '+' }
+}
+
+
+// Date validation
+fun validateDate(date: String): Boolean {
+    // Expecting format: dd/MM/yyyy or dd.MM.yyyy
+    val regex = """\d{2}[./]\d{2}[./]\d{4}""".toRegex()
+    return regex.matches(date)
+}
+
+// Time validation
+fun validateTime(time: String): Boolean {
+    // Expecting format: HH:mm (24-hour clock system)
+    val regex = """([01]\d|2[0-3]):[0-5]\d""".toRegex()
+    // Expecting time between 0500 hrs and 2300 hrs (working hours)
+    val timeParts = time.split(":")
+    val hours = timeParts[0].toInt()
+    return regex.matches(time) && hours in 5..23
 }
 
 fun calculateTotalAmount(items: List<Item>): Double {
     return items.sumOf { it.price }
 }
+
+val nairobiLocations = listOf(
+    "Dagoretti",
+    "Embakasi",
+    "Kamukunji",
+    "Kasarani",
+    "Kibra",
+    "Langata",
+    "Makadara",
+    "Mathare",
+    "Roysambu",
+    "Ruaraka",
+    "Starehe",
+    "Westlands",
+)

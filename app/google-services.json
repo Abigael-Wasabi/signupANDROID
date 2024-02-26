@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "57510627341",
-    "project_id": "simple-login-screen-7cad8",
-    "storage_bucket": "simple-login-screen-7cad8.appspot.com"
+    "project_number": "159810834809",
+    "project_id": "online-supermarket-shopp-a812c",
+    "storage_bucket": "online-supermarket-shopp-a812c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:57510627341:android:3bce36fbd2611050e02d44",
+        "mobilesdk_app_id": "1:159810834809:android:2fa89a1dd5f5a884685fa8",
         "android_client_info": {
           "package_name": "com.ist.simpleloginscreen"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "57510627341-k9aueodoli0ms7rrm6tnerg4docgfrke.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBbDw7_aMmg_UDAIdPErUXnfnyQhv0zzsA"
+          "current_key": "AIzaSyAmGzPtthbPN0tz-jLSvMnlJXWQHxGJPU4"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "57510627341-k9aueodoli0ms7rrm6tnerg4docgfrke.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
