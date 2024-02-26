@@ -1,9 +1,26 @@
-# Simple signup Screen.
+# Online Supermarket Shopping
 
-A simple signup screen with username, email, password, phone number
-Android app,applied MVVM architecture, screens reps the UI, viewModels reps controllers(business
-logic), model rep structure of the db, userRepo injects firebase
-services, navigation for navigating thru the app;frm one screen to another
+Online Supermarket Shopping is a mobile application used by customers to purchase goods online,
+the goods are then delivered to their physical location
+
+# Tech Stack
+
+Kotlin - programming language
+Jetpack Compose - a modern UI toolkit used for building native android application
+Firebase - cloud based NoSQL db for storing n syncing data in realtime
+MVVM architecture
+
+# Key Features
+
+Users register and authenticate their accounts. They easily browse and select items, which are then
+conveniently added to their cart for checkout. During the checkout process, users provide essential
+details such as their phone number, delivery location and preferred date and time for delivery.
+Once the order is confirmed, users proceed to make payment and finalize their purchase by clicking
+the order button.
+
+# Author
+
+[Abiwasabi](https://github.com/Abigael-Wasabi)
 
 ![Screenshot 2024-02-25 010604](https://github.com/Abigael-Wasabi/signupANDROID/assets/94919325/55071029-6c0d-4f16-962e-b268d9cb04ba)
 ![Screenshot 2024-02-26 101539](https://github.com/Abigael-Wasabi/signupANDROID/assets/94919325/52f61ed6-187f-4a0a-aebf-4fba0f6f0d9b)
