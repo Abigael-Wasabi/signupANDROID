@@ -39,6 +39,7 @@ import com.ist.simpleloginscreen.presentation.screens.main.BottomNavigationItem
 import com.ist.simpleloginscreen.presentation.screens.main.BottomNavigationMenu
 import com.ist.simpleloginscreen.presentation.ui.theme.BurntOrange
 import com.ist.simpleloginscreen.presentation.ui.theme.Pink80
+import com.ist.ondemand.presentation.screens.main.ProductCard as ProductCard1
 
 @Composable
 fun ServiceScreen(navController: NavController, vm: MainViewModel) {
@@ -100,22 +101,22 @@ fun ServiceScreen(navController: NavController, vm: MainViewModel) {
             )
         }
 
-        val filteredProducts = when {
-            searchText.isBlank() -> getProductsByOption(selectedOption)
-            else -> vm.products.value.filter { it.name.contains(searchText, ignoreCase = true) }
-        }
-
-        if (filteredProducts.isNotEmpty()) {
-            ProductGrid(filteredProducts, vm.cartItems.value) { product ->
-                vm.addToCart(product)
-            }
-        } else {
-            Text(
-                text = "No matching products found",
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+//        val filteredProducts = when {
+//            searchText.isBlank() -> getProductsByOption(selectedOption)
+//            else -> vm.products.value.filter { it.name.contains(searchText, ignoreCase = true) }
+//        }
+//
+//        if (filteredProducts.isNotEmpty()) {
+//            ProductGrid(filteredProducts, vm.cartItems.value) { product ->
+//                vm.addToCart(product)
+//            }
+//        } else {
+//            Text(
+//                text = "No matching products found",
+//                textAlign = TextAlign.Center,
+//                modifier = Modifier.fillMaxWidth()
+//            )
+//        }
 
 
         //Display Product Grid based on selected option
@@ -162,11 +163,16 @@ fun ProductGrid(
     cartItems: List<MainViewModel.CartItem>,
     onItemClick: (Product) -> Unit,
 ) {
-    LazyColumn(
-        modifier = Modifier.padding(16.dp)
-    ) {
-        items(products) { product ->
-            ProductCard(product, onItemClick, cartItems)
+    LazyColumn {
+        items(products.chunked(2)) { rowProducts ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                rowProducts.forEach { product ->
+                    ProductCard1(product, onItemClick, cartItems)
+                }
+            }
         }
     }
 }
@@ -185,13 +191,10 @@ fun ProductCard(
             .padding(8.dp)
             .clickable {
                 onItemClick(product)
-//                vm.addToCart(product, true)
             }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Image(
-//                imageUrl = cartItem.itemImage
-//                painter = painterResource(id = product.imageResId),
                 painter = painterResource(id = product.imageResId),
                 contentDescription = null,
                 modifier = Modifier.size(120.dp)
