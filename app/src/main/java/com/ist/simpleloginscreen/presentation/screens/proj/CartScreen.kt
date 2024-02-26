@@ -128,7 +128,7 @@ fun CartScreen(navController: NavController, vm: MainViewModel, selectedItems: L
 }
 
 // Model class for representing an item
-data class Item(val name: String, val price: Double, val imageUrl: String)
+data class Item(val name: String, val price: Double, val imageUrl: Int)
 
 
 @OptIn(ExperimentalMaterial3Api::class)

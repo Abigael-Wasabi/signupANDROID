@@ -34,7 +34,6 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    val products: MutableState<List<Product>> = mutableStateOf(emptyList()),
     val auth: FirebaseAuth, val db: FirebaseFirestore, val storage: FirebaseStorage,
 ) : ViewModel() {
 
@@ -147,7 +146,6 @@ class MainViewModel @Inject constructor(
             inProgress.value = false
         }
     }
-
 
     /**
      * Creates or updates the user profile with the provided information.
@@ -364,14 +362,14 @@ class MainViewModel @Inject constructor(
         val itemId: String,
         val itemName: String,
         val itemPrice: Double,
-        val itemImage: String,
+        val itemImage: Int,
         var quantity: Int,
     )
 
 
     // add an item to the cart
     fun addToCart(item: Product) {
-        val existingItem = cartItems.value.find { it.itemName == item.name }
+        val existingItem = cartItems.value.find { it.itemId == item.id }
         if (existingItem != null) {
             // If item already exists in the cart, increment quantity
             existingItem.quantity++
@@ -382,7 +380,7 @@ class MainViewModel @Inject constructor(
                 itemId = item.id, // Assuming your Product class has an id property
                 itemName = item.name,
                 itemPrice = item.price,
-                itemImage = item.imageResId.toString(),
+                itemImage = item.imageResId,
                 quantity = 1, //initial quantity is 1
             )
             cartItems.value = cartItems.value + listOf(cartItem)
@@ -391,8 +389,8 @@ class MainViewModel @Inject constructor(
 
 
     // remove an item from the cart
-    fun removeFromCart(itemId: String) {
-        cartItems.value = cartItems.value.filter { it.itemId != itemId }
+    fun removeFromCart(itemName: String) {
+        cartItems.value = cartItems.value.filter { it.itemName != itemName }
     }
 
     // Method to update the quantity of an item in the cart
