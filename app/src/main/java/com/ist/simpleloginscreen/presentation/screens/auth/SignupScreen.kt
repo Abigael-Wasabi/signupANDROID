@@ -5,10 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -40,7 +38,6 @@ import com.ist.simpleloginscreen.app.Routes
 import com.ist.simpleloginscreen.presentation.MainViewModel
 import com.ist.simpleloginscreen.presentation.common.CheckSignedIn
 import com.ist.simpleloginscreen.presentation.common.ProgressSpinner
-import com.ist.simpleloginscreen.presentation.components.GoogleSignInButton
 import com.ist.simpleloginscreen.presentation.components.HeadingTextComponent
 import com.ist.simpleloginscreen.presentation.components.SimpleTextComponent
 
@@ -124,8 +121,10 @@ fun SignupScreen(navController: NavController, vm: MainViewModel) {
                     vm.onSignup(
                         usernameState.value.text,
                         emailState.value.text,
-                        passState.value.text
+                        passState.value.text,
+                        navController = navController
                     )
+                    navController.navigate("Services")
                 }, modifier = Modifier.padding(8.dp)
             ) {
                 Text(text = "SIGN UP")

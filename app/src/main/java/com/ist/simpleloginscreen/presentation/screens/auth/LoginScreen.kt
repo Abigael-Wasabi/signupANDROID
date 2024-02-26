@@ -37,7 +37,6 @@ import com.ist.simpleloginscreen.presentation.components.MyLogo
 import com.ist.simpleloginscreen.presentation.components.Or
 import com.ist.simpleloginscreen.presentation.components.SignUp
 import com.ist.simpleloginscreen.presentation.components.SimpleTextComponent
-import com.ist.simpleloginscreen.presentation.components.GoogleSignInButton
 import com.ist.loginscreen.screens.login.Preview as Preview1
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,7 +95,11 @@ fun LoginScreen(navController: NavHostController, vm: MainViewModel) {
                     val email = emailState.value.text
                     val pass = passState.value.text
                     if (email.isNotEmpty() && pass.isNotEmpty()) {
-                        vm.onLogin(email, pass)
+                        vm.onLogin(
+                            email,
+                            pass,
+                            navController = navController
+                        )
                         navController.navigate("Services")
                     } else {
                         Log.d(null, "Please fill in all the fields")

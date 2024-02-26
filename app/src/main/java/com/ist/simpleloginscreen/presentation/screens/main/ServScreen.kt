@@ -101,22 +101,20 @@ fun ServiceScreen(navController: NavController, vm: MainViewModel) {
             )
         }
 
-//        val filteredProducts = when {
-//            searchText.isBlank() -> getProductsByOption(selectedOption)
-//            else -> vm.products.value.filter { it.name.contains(searchText, ignoreCase = true) }
-//        }
-//
-//        if (filteredProducts.isNotEmpty()) {
-//            ProductGrid(filteredProducts, vm.cartItems.value) { product ->
-//                vm.addToCart(product)
-//            }
-//        } else {
-//            Text(
-//                text = "No matching products found",
-//                textAlign = TextAlign.Center,
-//                modifier = Modifier.fillMaxWidth()
-//            )
-//        }
+        // Filter products based on search text and selected option
+        val filteredProducts = getFilteredProducts(vm, searchText, selectedOption)
+
+        if (filteredProducts.isNotEmpty()) {
+            ProductGrid(filteredProducts, vm.cartItems.value) { product ->
+                vm.addToCart(product)
+            }
+        } else {
+            Text(
+                text = "No matching products found",
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
 
         //Display Product Grid based on selected option
@@ -211,12 +209,22 @@ fun ProductCard(
 }
 
 
-fun getProductsByOption(option: String): List<Product> {
-    return when (option) {
+fun getFilteredProducts(
+    vm: MainViewModel,
+    searchText: String,
+    selectedOption: String
+): List<Product> {
+    val allProducts = when (selectedOption) {
         "Hair Products" -> hairProducts
         "Foods" -> foodProducts
         "Stationeries" -> stationeryProducts
         "Electronics" -> electronicsProducts
         else -> emptyList()
+    }
+
+    return if (searchText.isBlank()) {
+        allProducts
+    } else {
+        allProducts.filter { it.name.startsWith(searchText, ignoreCase = true) }
     }
 }
