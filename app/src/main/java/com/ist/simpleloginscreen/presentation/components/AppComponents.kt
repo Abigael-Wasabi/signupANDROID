@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.android.gms.common.SignInButton
 import com.ist.simpleloginscreen.R
+import com.ist.simpleloginscreen.presentation.screens.proj.Item
 import com.ist.simpleloginscreen.presentation.ui.theme.LightColorScheme
 
 
@@ -379,27 +381,37 @@ fun PasswordTextFieldComponent(
         )
 }
 
-//@Composable
-//fun DropdownInput(
-//    label: String,
-//    items: List<String>,
-//    selectedIndex: Int,
-//    onSelectedIndexChanged: (Int) -> Unit
-//) {
-//    Column {
-//        Text(text = label)
-//        DropdownMenu(
-//            expanded = false,
-//            onDismissRequest = { /* Handle dismiss */ }
-//        ) {
-//            items.forEachIndexed { index, item ->
-//                DropdownMenuItem(onClick = {
-//                    onSelectedIndexChanged(index)
-//                }) {
-//                    Text(text = "item")
-//                }
-//            }
-//        }
-//    }
-//}
-
+@Composable
+fun OrderConfirmationDialog(
+    isVisible: Boolean,
+    onDismiss: () -> Unit,
+    products: List<Item>,
+    totalAmount: Double,
+    deliveryLocation: String,
+    deliveryDate: String,
+    deliveryTime: String
+) {
+    if (isVisible) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            confirmButton = {
+                Button(onClick = onDismiss) {
+                    Text("X")
+                }
+            },
+            text = {
+                Column {
+                    Text("Order Summary:")
+                    products.forEach { item ->
+                        Text("${item.name} - \$${item.price}")
+                    }
+                    Text("Total Amount: \$${"%.2f".format(totalAmount)}")
+                    Text("Delivery Location: $deliveryLocation")
+                    Text("Delivery Date: $deliveryDate")
+                    Text("Delivery Time: $deliveryTime")
+                    Text("Thank you for shopping with us!")
+                }
+            }
+        )
+    }
+}

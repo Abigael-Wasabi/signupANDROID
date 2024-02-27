@@ -108,31 +108,6 @@ class MainViewModel @Inject constructor(
     }
 
 
-    //    fun onLogin(email: String, pass: String, navController: NavController) {
-//        inProgress.value = true
-//        //Method to sign in a user with an email address and password.
-//        auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener { task ->
-//            if (task.isSuccessful) {
-//                val currentUser = auth.currentUser
-//                if (currentUser != null) {
-//                    signedIn.value = true
-//                    getUserData(currentUser.uid)
-//                    //Add grt services function here
-//                    //test whether the user is signed in
-//                    handleException(customMessage = "Welcome $email")
-//                } else {
-//                    handleException(customMessage = "User does not exist")
-//                    inProgress.value = false
-//                }
-//            } else {
-//                handleException(task.exception, "Login failed")
-//                inProgress.value = false
-//            }
-//        }.addOnFailureListener { exc ->
-//            handleException(exc, "Login failed")
-//            inProgress.value = false
-//        }
-//    }
     fun onLogin(email: String, pass: String, navController: NavController) {
         inProgress.value = true
         auth.signInWithEmailAndPassword(email, pass)
@@ -337,7 +312,7 @@ class MainViewModel @Inject constructor(
         val itemName: String,
         val itemPrice: Double,
         val itemImage: Int,
-        var quantity: Int,
+//        var quantity: Int,
     )
 
 
@@ -346,7 +321,7 @@ class MainViewModel @Inject constructor(
         val existingItem = cartItems.value.find { it.itemId == item.id }
         if (existingItem != null) {
             // If item already exists in the cart, increment quantity
-            existingItem.quantity++
+//            existingItem.quantity++
             cartItems.value = cartItems.value // Trigger recomposition
         } else {
             // If item does not exist in the cart, add it with quantity 1
@@ -355,7 +330,7 @@ class MainViewModel @Inject constructor(
                 itemName = item.name,
                 itemPrice = item.price,
                 itemImage = item.imageResId,
-                quantity = 1, //initial quantity is 1
+//                quantity = 1, //initial quantity is 1
             )
             cartItems.value = cartItems.value + listOf(cartItem)
         }
