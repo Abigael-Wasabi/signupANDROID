@@ -42,12 +42,10 @@ import com.ist.simpleloginscreen.presentation.screens.main.BottomNavigationItem
 import com.ist.simpleloginscreen.presentation.screens.main.BottomNavigationMenu
 
 
-/**
- * Composable function that represents the profile screen.
- *
- * @param navController The navigation controller used for navigating between screens.
- * @param vm The view model used for managing the profile data.
- */
+/**Composable function that represents the profile screen.*/
+//navController The navigation controller used for navigating between screens.
+//vm Instance of the main view model
+
 @Composable
 fun ProfileScreen(navController: NavController, vm: MainViewModel) {
     var isSearchVisible by remember { mutableStateOf(false) }
@@ -93,20 +91,18 @@ fun ProfileScreen(navController: NavController, vm: MainViewModel) {
     }
 }
 
-/**
- * Composable function that represents the profile screen content.
- *
- * @param vm The view model for the screen.
- * @param name The name of the user.
- * @param username The username of the user.
- * @param bio The bio of the user.
- * @param onNameChange Callback function for name changes.
- * @param onUsernameChange Callback function for username changes.
- * @param onBioChange Callback function for bio changes.
- * @param onSave Callback function for saving changes.
- * @param onBack Callback function for navigating back.
- * @param onLogout Callback function for logging out.
- */
+
+//vm The view model for the screen.
+//name The name of the user.
+//username The username of the user.
+//bio The bio of the user.
+// onNameChange Callback function for name changes.
+//onUsernameChange Callback function for username changes.
+// onBioChange Callback function for bio changes.
+// onSave Callback function for saving changes.
+// onBack Callback function for navigating back.
+// onLogout Callback function for logging out.
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -207,12 +203,9 @@ fun ProfileContent(
     }
 }
 
-/**
- * Composable function that displays the profile image and allows the user to change it.
- *
- * @param imageUrl The URL of the profile image.
- * @param vm The MainViewModel instance.
- */
+/**Composable function that displays the profile image and allows the user to change it.*/
+//@param imageUrl The URL of the profile image.
+
 
 @Composable
 fun ProfileImage(imageUrl: String?, vm: MainViewModel) {

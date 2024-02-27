@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.ist.simpleloginscreen.presentation.MainViewModel
+import com.ist.simpleloginscreen.presentation.components.OrderConfirmationDialog
 import com.ist.simpleloginscreen.presentation.screens.main.BottomNavigationItem
 import com.ist.simpleloginscreen.presentation.screens.main.BottomNavigationMenu
 
@@ -51,6 +52,10 @@ fun CartScreen(navController: NavController, vm: MainViewModel, selectedItems: L
     var selectedLocation by remember { mutableStateOf("") }
     var isLocationValid by remember { mutableStateOf(false) }
     isLocationValid = selectedLocation in nairobiLocations
+    var orderButtonClicked by remember { mutableStateOf(false) }
+    var isPayButtonClicked by remember { mutableStateOf(false) }
+//    var orderButtonEnabled by remember { mutableStateOf(false) }
+
 
     Column {
         BottomNavigationMenu(
@@ -63,7 +68,7 @@ fun CartScreen(navController: NavController, vm: MainViewModel, selectedItems: L
 
         // Calculate total amount
         val totalAmount = selectedItems.sumOf { it.price }
-        
+
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
                 text = "Back",
@@ -154,7 +159,6 @@ fun CartScreen(navController: NavController, vm: MainViewModel, selectedItems: L
                         Button(
                             onClick = {
                                 vm.removeFromCart(item.name)
-//                            calculateTotalAmount() -=item.price,
                             },
                             modifier = Modifier.padding(start = 8.dp)
                         ) {
@@ -179,20 +183,31 @@ fun CartScreen(navController: NavController, vm: MainViewModel, selectedItems: L
                 verticalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = { /* Pay button action */ },
-                    enabled = isPhoneNumberValid && selectedItems.isNotEmpty()
+                    onClick = { isPayButtonClicked = true },
+                    enabled = isPhoneNumberValid && isDateValid && isTimeValid &&
+                            isLocationValid && selectedItems.isNotEmpty()
                 ) {
                     Text(text = "Pay")
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Button(
-                    onClick = { /* Order button action */ },
-                    enabled = isPhoneNumberValid && isDateValid && isTimeValid &&
+                    onClick = { orderButtonClicked = true },
+                    enabled = isPayButtonClicked && isPhoneNumberValid && isDateValid && isTimeValid &&
                             isLocationValid && selectedItems.isNotEmpty()
                 ) {
                     Text(text = "Order")
                 }
             }
+            OrderConfirmationDialog(
+                isVisible = orderButtonClicked,
+                onDismiss = { orderButtonClicked = false },
+                products = selectedItems,
+                totalAmount = totalAmount,
+                deliveryLocation = selectedLocation,
+                deliveryDate = deliveryDate,
+                deliveryTime = deliveryTime
+            )
+
         }
     }
 }

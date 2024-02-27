@@ -183,7 +183,7 @@ fun ProductCard(
     cartItems: List<MainViewModel.CartItem>
 ) {
     val cartItem = cartItems.find { it.itemId == product.id }
-    val quantity = cartItem?.quantity ?: 0 // Default quantity is 0 if item not in cart
+//    val quantity = cartItem?.quantity ?: 0 // Default quantity is 0 if item not in cart
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -202,7 +202,7 @@ fun ProductCard(
             Text(text = "$${product.price}")
             Spacer(modifier = Modifier.height(8.dp))
             Button(onClick = { onItemClick(product) }) {
-                Text(text = "Add to Cart $quantity")
+                Text(text = "Add to Cart")
             }
         }
     }
